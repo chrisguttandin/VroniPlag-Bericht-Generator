@@ -4,6 +4,8 @@ class Token {
 
 	private $token;
 
+	private $tokenToCompare;
+
 	public function Token($token) {
 		$this->token = $token;
 	}
@@ -13,8 +15,9 @@ class Token {
 	}
 
 	public function asStringToCompare() {
-		$tokenToCompare = $this->token;
-		$tokenToCompare = preg_replace(array(
+		if (!isset($this->tokenToCompare)) {
+			$tokenToCompare = $this->token;
+			$tokenToCompare = preg_replace(array(
 			'/\$\[\$\.\.\.\$\]\$/', // [...] looks like this $[$...$]$
 			'/\$\[\$FN 1\$\]\$/',
 			'/\$\[\$/',
@@ -33,7 +36,7 @@ class Token {
 			'/\'\'/',
 			'/^\s$/',
 			'/\./'
-		), array(
+			), array(
 			'',
 			'',
 			'',
@@ -52,9 +55,10 @@ class Token {
 			'',
 			'',
 			''
-		), $tokenToCompare);
-		$tokenToCompare = strtolower($tokenToCompare);
-		return $tokenToCompare;
+			), $tokenToCompare);
+			$this->tokenToCompare = strtolower($tokenToCompare);
+		} 
+		return $this->tokenToCompare;
 	}
 
 }

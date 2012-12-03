@@ -80,6 +80,7 @@ class TextMarker {
                 $new_plagiarism_text = $plagiarism_tokens[$plagiarism_index + $plagiarism_length]->asStringToCompare();
                 $new_plagiarism_text_length = strlen($new_plagiarism_text);
 
+                // similar_text() is much faster then strcasecmp()
                 if ($new_original_text_length === $new_plagiarism_text_length
                     && $new_original_text_length === similar_text($new_original_text, $new_plagiarism_text)) {
 
