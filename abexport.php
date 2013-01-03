@@ -28,6 +28,8 @@
 
 %\setparsizes{1em}{.5\baselineskip}{0pt plus 1fil}
 
+\usepackage{float} % for floating figures
+
 \author{VroniPlag} 
 
 <?php

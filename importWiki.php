@@ -47,6 +47,54 @@ foreach ($tables as $table) {
 	$offset += strlen($replacement) - $length;
 }
 
+//preg_match('/\[\[([^\]]*)\]\]/', $content, $images, PREG_OFFSET_CAPTURE);
+preg_match_all('/(\[\[Datei:([0-9a-zA-Z\-\s,\.]+)\|([0-9a-zA-Z\-\s,\.\|]*)\|([0-9a-zA-Z\-\s,\.\|]*)\]\][\s<>td\/]*)+(\[\[Datei:([0-9a-zA-Z\-\s,\.]+)\|([0-9a-zA-Z\-\s,\.\|]*)\|([0-9a-zA-Z\-\s,\.\|]*)\]\])/', $content, $images, PREG_OFFSET_CAPTURE);
+
+$offset = 0;
+for ($i = 0; $i < count($images[0]); $i++) {
+	$start = $images[0][$i][1] + $offset;
+	$length = strlen($images[0][$i][0]);
+
+	preg_match_all('/(\[\[Datei:([0-9a-zA-Z\-\s,\.]+)\|([0-9a-zA-Z\-\s,\.\|]*)\|([0-9a-zA-Z\-\s,\.\|]*)\]\])/', $images[0][$i][0], $inner_images);
+
+	$replacement = '\begin{figure}[h!]';
+	for ($i = 0; $i < count($inner_images[0]); $i++) {
+		$replacement .= ' \begin{minipage}{0.31\textwidth} \includegraphics[width=\textwidth]{img/' . $inner_images[2][$i] . '} \caption{'. $inner_images[4][$i] . '} \end{minipage}';
+		if ($i + 1 < count($inner_images[0])) {
+			$replacement .= ' \hfill';
+		}
+
+		// query the image url
+		$all_images = unserialize(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&list=allimages&format=php&aifrom=' . urlencode($inner_images[2][$i])));
+		$image_url = $all_images['query']['allimages'][0]['url'];
+
+		// download the image
+		exec('curl -L ' . $image_url . ' > "img/' . $inner_images[2][$i] . '"');
+	}
+	$replacement .= ' \end{figure}';
+
+	$content = substr_replace($content, $replacement, $start, $length);
+	$offset += strlen($replacement) - $length;
+}
+
+preg_match_all('/(\[\[Datei:([0-9a-zA-Z\-\s,\.]+)\|([0-9a-zA-Z\-\s,\.\|]*)\|([0-9a-zA-Z\-\s,\.\|]*)\]\])/', $content, $images, PREG_OFFSET_CAPTURE);
+
+$offset = 0;
+for ($i = 0; $i < count($images[0]); $i++) {
+	$replacement = '\begin{figure}[h!] \begin{minipage}{\textwidth} \includegraphics[width=\textwidth]{img/' . $images[2][$i][0] . '} \caption{'. $images[4][$i][0] . '} \end{minipage} \end{figure}';
+	$start = $images[0][$i][1] + $offset;
+	$length = strlen($images[0][$i][0]);
+	$content = substr_replace($content, $replacement, $start, $length);
+	$offset += strlen($replacement) - $length;
+
+	// query the image url
+	$all_images = unserialize(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&list=allimages&format=php&aifrom=' . urlencode($images[2][$i][0])));
+	$image_url = $all_images['query']['allimages'][0]['url'];
+
+	// download the image
+	exec('curl -L ' . $image_url . ' > "img/' . $images[2][$i][0] . '"');
+}
+
 // references
 $content = korrStringWithLinks($content, true, STUFFINTOFOOTNOTES, false);
 
