@@ -59,7 +59,7 @@ for ($i = 0; $i < count($images[0]); $i++) {
 
 	$replacement = '\begin{figure}[h!]';
 	for ($i = 0; $i < count($inner_images[0]); $i++) {
-		$replacement .= ' \begin{minipage}{0.31\textwidth} \includegraphics[width=\textwidth]{img/' . $inner_images[2][$i] . '} \caption{'. $inner_images[4][$i] . '} \end{minipage}';
+		$replacement .= ' \begin{minipage}{0.31\textwidth} \includegraphics[width=\textwidth]{img/' . $inner_images[2][$i] . '} \caption{' . $inner_images[4][$i] . '} \end{minipage}';
 		if ($i + 1 < count($inner_images[0])) {
 			$replacement .= ' \hfill';
 		}
