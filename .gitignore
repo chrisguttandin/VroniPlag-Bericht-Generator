@@ -9,3 +9,4 @@ ab.tex
 ab.toc
 cache
 debug.log
+*.DS_Store
