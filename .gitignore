@@ -10,3 +10,5 @@ ab.toc
 cache
 debug.log
 *.DS_Store
+img/*.jpg
+img/*.png
