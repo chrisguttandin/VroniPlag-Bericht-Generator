@@ -152,5 +152,7 @@ if($abLinks === 'color+underline') {
 \bibliographystyle{dinat-custom}
 \renewcommand{\refname}{Quellenverzeichnis}
 \bibliography{ab}
+\section{Abbildungsverzeichnis}
+\renewcommand{\listfigurename}{}
 \listoffigures
 \end{document}
