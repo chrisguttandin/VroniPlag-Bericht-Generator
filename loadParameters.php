@@ -19,3 +19,8 @@ if(!isset($bericht['Titel1']) || !isset($bericht['Titel2'])) {
 
 $TITEL1 = $bericht['Titel1'];
 $TITEL2 = $bericht['Titel2'];
+
+preg_match_all('/==\'\'\'\[\[[a-zA-Z]+\|(.*?)\]\]\'\'\'==/s', $cache['titelaufnahme'], $matches);
+$titelaufnahme_title = $matches[1][0];
+preg_match_all('/\]\]\'\'\'==(.*?)<div\sclass=autobarcode/s', $cache['titelaufnahme'], $matches);
+$titelaufnahme_subtitle = $matches[1][0];

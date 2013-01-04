@@ -52,7 +52,12 @@ print "fertig!\n";
 # Entwurf laden
 print "Lade Entwurf... "; flush();
 if(($cache['static'] = WikiLoader::getRawTextByTitle(BERICHT_SEITE)) === false)
-	$cache['static'] = BLANKBERICHT;
+    $cache['static'] = BLANKBERICHT;
+print "fertig!\n";
+
+# Titelaufnahme laden
+print "Lade Titelaufnahme... "; flush();
+$cache['titelaufnahme'] = WikiLoader::getRawTextByTitle(NAME_PREFIX . '/Titelaufnahme');
 print "fertig!\n";
 
 # Ignorierte Eintraege speichern

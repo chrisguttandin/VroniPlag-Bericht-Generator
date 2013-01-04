@@ -135,6 +135,12 @@ if($abLinks === 'color+underline') {
 }
 ?>
 
+<?php require_once('korrekturen.php'); ?>
+\vbox{\huge <?php print korrString($titelaufnahme_title); ?>}
+\vspace*{20mm}
+\vbox{\large <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false); ?>}
+\newpage
+
 %\AddToShipoutPicture*{\BackgroundPic}
 \maketitle\thispagestyle{empty}
 %\ClearShipoutPicture
