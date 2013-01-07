@@ -162,9 +162,17 @@ if($abLinks === 'color+underline') {
 
 	imagefill($barcode, 0, 0, $white);
 	
-	require_once 'Logger.php';	
-	$pages = json_decode(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&generator=allpages&gaplimit=500&gapprefix=' . $parameters['prefix'] . '/0&prop=categories&cllimit=max&format=json'), true);
-	$pages = $pages['query']['pages'];
+	require_once 'Logger.php';
+	$pages = array();
+	$hundreds_digit = 0;
+	while (true) {
+		$response = json_decode(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&generator=allpages&gaplimit=500&gapprefix=' . $parameters['prefix'] . '/' . $hundreds_digit . '&prop=categories&cllimit=max&format=json'), true);
+		if (!isset($response['query'])) {
+			break;
+		}
+		$pages = array_merge($pages, $response['query']['pages']);
+		$hundreds_digit++;
+	}
 	$number_of_plag_pages = 0;
 	$number_of_relevant_pages = $parameters['range']['to'] - $parameters['range']['from'];
 
