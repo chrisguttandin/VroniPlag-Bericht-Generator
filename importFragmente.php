@@ -93,8 +93,12 @@ foreach($cache['fragments'] as $f) {
 	$list[$i]['inLit'] = $sources[$currentSourceTitle]['InLit'];
 	$list[$i]['inFN'] = $sources[$currentSourceTitle]['InFN'];
 	$list[$i]['wikiTitle'] = isset($f['wikiTitle']) ? titleToKey($f['wikiTitle']) : null;
-	preg_match('/\d+/', $list[$i]['seite'], $m1);
-	preg_match('/\d+/', $list[$i]['zeilen'], $m2);
+	if ($list[$i]['seite'] != null) {
+		preg_match('/\d+/', $list[$i]['seite'], $m1);
+	}
+	if ($list[$i]['zeilen'] != null) {
+		preg_match('/\d+/', $list[$i]['zeilen'], $m2);
+	}
 	$sort[$i] = (int)($m1[0]) *1000 + (int)$m2[0];
 	$fragmentTypeUsed[$currentTypeTitle] = true;
 	$i++;
