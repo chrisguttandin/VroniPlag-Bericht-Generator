@@ -137,8 +137,87 @@ if($abLinks === 'color+underline') {
 
 <?php require_once('korrekturen.php'); ?>
 \vbox{\huge <?php print korrString($titelaufnahme_title); ?>}
-\vspace*{20mm}
+\vspace*{10mm}
 \vbox{\large <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false); ?>}
+\vspace*{10mm}
+<?php
+
+	$parameters = json_decode(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&titles=' . NAME_PREFIX . '/AutoBarcodeParameter&format=json&cllimit=max&rvprop=content&prop=revisions'), true);
+	$parameters = reset($parameters['query']['pages']);
+	$parameters = $parameters['revisions'][0]['*'];
+	$parameters = preg_replace('/\[\[Kategorie:([0-9a-zA-Z]+)\]\]/', '', $parameters);
+	$parameters = json_decode($parameters, true);
+	$parameters = $parameters['AutoBarcodeParameter'];
+
+	$height = 300;
+	$width = ($parameters['to'] - $parameters['from']) * 10;
+
+	$barcode = imagecreate($width, $height);
+
+	$white = imagecolorallocate($barcode, 255, 255, 255);
+	$blue = imagecolorallocate($barcode, 0, 0, 255);
+	$dark_red = imagecolorallocate($barcode, 153, 0, 0);
+	$black = imagecolorallocate($barcode, 0, 0, 0);
+	$red = imagecolorallocate($barcode, 255, 0, 0);
+
+	imagefill($barcode, 0, 0, $white);
+	
+	require_once 'Logger.php';	
+	$pages = json_decode(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&generator=allpages&gaplimit=500&gapprefix=' . $parameters['prefix'] . '/0&prop=categories&cllimit=max&format=json'), true);
+	$pages = $pages['query']['pages'];
+
+	foreach ($pages as $page) {
+		$index = intval(substr($page['title'], count($parameters['prefix']) + 2));
+		$categories = $page['categories'];
+		$percent_of_plagiarism = 0;
+		$color = $white;
+		foreach ($categories as $category) {
+			if ($category['title'] === 'Kategorie:Plagiatsseite' && $percent_of_plagiarism < 1) {
+				$percent_of_plagiarism = 1;
+				$color = $black;
+			}
+			if ($category['title'] === 'Kategorie:Gt50' && $percent_of_plagiarism < 50) {
+				$percent_of_plagiarism = 50;
+				$color = $dark_red;
+			}
+			if ($category['title'] === 'Kategorie:Gt75' && $percent_of_plagiarism < 75) {
+				$percent_of_plagiarism = 75;
+				$color = $red;
+			}
+		}
+		if ($percent_of_plagiarism > 0) {
+			imagefilledrectangle($barcode, $index * 10, 0, ($index + 1) * 10 - 1, $height - 1, $color);
+		}
+	}
+
+	imagefilledrectangle($barcode, 0, 0, ($parameters['range']['from'] - 1) * 10 - 1, $height - 1, $blue);
+	imagefilledrectangle($barcode, ($parameters['range']['to'] - 1) * 10, 0, $width, $height - 1, $blue);
+
+	imagepng($barcode, 'img/barcode.png');
+
+	imagecolordeallocate($barcode, $white);
+	imagecolordeallocate($barcode, $blue);
+	imagecolordeallocate($barcode, $dark_red);
+	imagecolordeallocate($barcode, $black);
+	imagecolordeallocate($barcode, $red);
+
+	imagedestroy($barcode);
+
+	$caption = $parameters['reference'] . ' Barcode';
+?>
+\begin{figure}[h!]
+	\begin{minipage}{\textwidth}
+		\includegraphics[width=\textwidth]{img/barcode.png}
+		\caption{<?php echo $caption; ?>}
+	\end{minipage}
+\end{figure}
+\definecolor{blue}{rgb}{0,0,1}
+\definecolor{black}{rgb}{0,0,0}
+\definecolor{dark_red}{rgb}{0.6,0,0}
+\definecolor{red}{rgb}{1,0,0}
+
+Legende: \textcolor{blue}{nicht einberechnete Seiten}, \textcolor{black}{Seite enthält Plagiat}, \textcolor{dark_red}{mehr als 50 \% der Seite plagiiert}, \textcolor{red}{mehr als 75 \% der Seite plagiiert}
+
 \newpage
 
 %\AddToShipoutPicture*{\BackgroundPic}
