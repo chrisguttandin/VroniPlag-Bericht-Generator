@@ -82,17 +82,17 @@ foreach($cache['fragments'] as $f) {
 	$list[$i]['inFN'] = $sources[$currentSourceTitle]['InFN'];
 
 	$list[$i]['quelle'] = titleToKey($currentSourceTitle);
-	$list[$i]['seite'] = $f['seite'];
-	$list[$i]['zeilen'] = $f['zeilen'];
-	$list[$i]['plagiat'] = $f['plagiat'];
-	$list[$i]['seitefund'] = $f['seitefund'];
+	$list[$i]['seite'] = isset($f['seite']) ? $f['seite'] : null;
+	$list[$i]['zeilen'] = isset($f['zeilen']) ? $f['zeilen'] : null;
+	$list[$i]['plagiat'] = isset($f['plagiat']) ? $f['plagiat'] : null;
+	$list[$i]['seitefund'] = isset($f['seitefund']) ? $f['seitefund'] : null;
 	$list[$i]['zeilenfund'] = isset($f['zeilenfund']) ? $f['zeilenfund'] : '---';
-	$list[$i]['orig'] = $f['orig'];
+	$list[$i]['orig'] = isset($f['orig']) ? $f['orig'] : null;
 	$list[$i]['anmerkung'] = isset($f['anmerkung']) ? $f['anmerkung'] : '';
 	$list[$i]['kategorie'] = $currentTypeTitle;
 	$list[$i]['inLit'] = $sources[$currentSourceTitle]['InLit'];
 	$list[$i]['inFN'] = $sources[$currentSourceTitle]['InFN'];
-	$list[$i]['wikiTitle'] = titleToKey($f['wikiTitle']);
+	$list[$i]['wikiTitle'] = isset($f['wikiTitle']) ? titleToKey($f['wikiTitle']) : null;
 	preg_match('/\d+/', $list[$i]['seite'], $m1);
 	preg_match('/\d+/', $list[$i]['zeilen'], $m2);
 	$sort[$i] = (int)($m1[0]) *1000 + (int)$m2[0];
