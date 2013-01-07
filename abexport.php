@@ -165,6 +165,8 @@ if($abLinks === 'color+underline') {
 	require_once 'Logger.php';	
 	$pages = json_decode(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&generator=allpages&gaplimit=500&gapprefix=' . $parameters['prefix'] . '/0&prop=categories&cllimit=max&format=json'), true);
 	$pages = $pages['query']['pages'];
+	$number_of_plag_pages = 0;
+	$number_of_relevant_pages = $parameters['range']['to'] - $parameters['range']['from'];
 
 	foreach ($pages as $page) {
 		$index = intval(substr($page['title'], count($parameters['prefix']) + 2));
@@ -187,6 +189,7 @@ if($abLinks === 'color+underline') {
 		}
 		if ($percent_of_plagiarism > 0) {
 			imagefilledrectangle($barcode, $index * 10, 0, ($index + 1) * 10 - 1, $height - 1, $color);
+			$number_of_plag_pages++;
 		}
 	}
 
@@ -204,11 +207,12 @@ if($abLinks === 'color+underline') {
 	imagedestroy($barcode);
 
 	$caption = $parameters['reference'] . ' Barcode';
+
+	$percentage_of_plagiarism = round(($number_of_plag_pages / $number_of_relevant_pages) * 100, 2);
 ?>
 \begin{figure}[h!]
 	\begin{minipage}{\textwidth}
 		\includegraphics[width=\textwidth]{img/barcode.png}
-		\caption{<?php echo $caption; ?>}
 	\end{minipage}
 \end{figure}
 \definecolor{blue}{rgb}{0,0,1}
@@ -217,6 +221,9 @@ if($abLinks === 'color+underline') {
 \definecolor{red}{rgb}{1,0,0}
 
 Legende: \textcolor{blue}{nicht einberechnete Seiten}, \textcolor{black}{Seite enthält Plagiat}, \textcolor{dark_red}{mehr als 50 \% der Seite plagiiert}, \textcolor{red}{mehr als 75 \% der Seite plagiiert}
+\newline
+\newline
+Plagiatsfunde nach Seiten. Anzahl Seiten mit Plagiaten in <?php echo $parameters['reference']; ?>: <?php echo $number_of_plag_pages; ?>, d.h. <?php echo $percentage_of_plagiarism; ?> \%
 
 \newpage
 
