@@ -209,6 +209,7 @@ function korrWikiFontStyles($s)
 	$s = preg_replace(';<u>(.*?)</u>;s', '\underline{$1}', $s);
 	$s = preg_replace(';<i>(.*?)</i>;s', '\textsl{$1}', $s);
 	$s = preg_replace(';<b>(.*?)</b>;s', '\textbf{$1}', $s);
+	$s = preg_replace('/\n/', '\newline', $s);
 	return $s;
 }
 
