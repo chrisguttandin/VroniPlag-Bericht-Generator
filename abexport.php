@@ -136,9 +136,10 @@ if($abLinks === 'color+underline') {
 ?>
 
 <?php require_once('korrekturen.php'); ?>
-\vbox{\huge <?php print korrString($titelaufnahme_title); ?>}
+
+\vbox{\huge \noindent <?php print korrString($titelaufnahme_title); ?>}
 \vspace*{10mm}
-\vbox{\large <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false); ?>}
+\vbox{\noindent <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false); ?>}
 \vspace*{10mm}
 <?php
 
