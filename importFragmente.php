@@ -12,7 +12,7 @@ $cache = unserialize(file_get_contents('cache'));
 
 # Liste ignorierter Fragmente/Plagiatskategorien/Quellen anzeigen
 foreach($cache['ignored']['fragments'] as $title => $reason) {
-	print "%XXX: Ignoriere Fragment: $title: $reason\n";
+	print "%XXX: Ignoriere Fragment: $title: " . preg_replace('/\n/', ' ', $reason) . "\n";
 }
 foreach($cache['ignored']['sources'] as $title) {
 	print "%XXX: Ignoriere Quelle: $title\n";
