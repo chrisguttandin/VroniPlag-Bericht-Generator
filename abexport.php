@@ -30,7 +30,7 @@
 
 \usepackage{float} % for floating figures
 
-\author{VroniPlag} 
+%\author{VroniPlag} 
 
 <?php
 require 'config.php';
@@ -38,7 +38,7 @@ require 'loadParameters.php';
 ?>
 \title{<?php print $TITEL1;?>}
 \subtitle{<?php print $TITEL2;?>}
-\publishers{\url{<?php print 'http://de.vroniplag.wikia.com/wiki/'.BERICHT_SEITE;?>}}
+%\publishers{\url{<?php print 'http://de.vroniplag.wikia.com/wiki/'.BERICHT_SEITE;?>}}
 
 \hypersetup{%
         pdfauthor={VroniPlag},%
@@ -137,10 +137,17 @@ if($abLinks === 'color+underline') {
 
 <?php require_once('korrekturen.php'); ?>
 
+
+\author{} 
+\date{}
+\subtitle{}
+\publishers{}
+\maketitle
+\vspace*{-2cm}
 \vbox{\huge \noindent <?php print korrString($titelaufnahme_title); ?>}
-\vspace*{10mm}
+\vspace*{5mm}
 \vbox{\noindent <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false); ?>}
-\vspace*{10mm}
+\vspace*{5mm}
 <?php
 
 	$parameters = json_decode(file_get_contents('http://de.vroniplag.wikia.com/api.php?action=query&titles=' . NAME_PREFIX . '/AutoBarcodeParameter&format=json&cllimit=max&rvprop=content&prop=revisions'), true);
@@ -238,11 +245,16 @@ if($abLinks === 'color+underline') {
 \newline
 \newline
 Plagiatsfunde nach Seiten. Anzahl Seiten mit Plagiaten in <?php echo $parameters['reference']; ?>: <?php echo $number_of_plag_pages; ?>, d.h. <?php echo $percentage_of_plagiarism; ?> \%
-
+\begin{center}
+\today
+\end{center}
+\begin{center}
+\url{<?php print 'http://de.vroniplag.wikia.com/wiki/'.BERICHT_SEITE;?>}
+\end{center}
 \newpage
 
 %\AddToShipoutPicture*{\BackgroundPic}
-\maketitle\thispagestyle{empty}
+%\maketitle\thispagestyle{empty}
 %\ClearShipoutPicture
 
 \tableofcontents
