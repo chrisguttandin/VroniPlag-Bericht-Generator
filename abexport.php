@@ -202,8 +202,13 @@ if($abLinks === 'color+underline') {
 		}
 	}
 
+	// nicht einberechnete Seiten
 	imagefilledrectangle($barcode, 0, 0, ($parameters['range']['from'] - 1) * 10 - 1, $height - 1, $blue);
 	imagefilledrectangle($barcode, ($parameters['range']['to'] - 1) * 10, 0, $width, $height - 1, $blue);
+
+	// Balken oben und unten
+	imagefilledrectangle($barcode, 0, 0, $width, 10, $black);
+	imagefilledrectangle($barcode, 0, $height - 10, $width, $height, $black);
 
 	imagepng($barcode, 'img/barcode.png');
 
@@ -229,7 +234,7 @@ if($abLinks === 'color+underline') {
 \definecolor{dark_red}{rgb}{0.6,0,0}
 \definecolor{red}{rgb}{1,0,0}
 
-Legende: \textcolor{blue}{nicht einberechnete Seiten}, \textcolor{black}{Seite enthält Plagiat}, \textcolor{dark_red}{mehr als 50 \% der Seite plagiiert}, \textcolor{red}{mehr als 75 \% der Seite plagiiert}
+\noindent Legende: \textcolor{blue}{blau}: nicht einberechnete Seiten, \textcolor{black}{schwarz}: Seite enthält Plagiat, \textcolor{dark_red}{dunkel rot}: mehr als 50 \% der Seite plagiiert, \textcolor{red}{rot}: mehr als 75 \% der Seite plagiiert
 \newline
 \newline
 Plagiatsfunde nach Seiten. Anzahl Seiten mit Plagiaten in <?php echo $parameters['reference']; ?>: <?php echo $number_of_plag_pages; ?>, d.h. <?php echo $percentage_of_plagiarism; ?> \%
