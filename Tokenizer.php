@@ -48,6 +48,10 @@ class Tokenizer {
 		return $new_tokens;
 	}
 
+	private static function splitAtColons($tokens) {
+		return self::splitAtCharacter($tokens, ':', '/:/');
+	}
+
 	private static function splitAtComma($tokens) {
 		return self::splitAtCharacter($tokens, ',', '/,/');
 	}
@@ -99,10 +103,35 @@ class Tokenizer {
 
 		$tokens = self::splitAtSemicolons($tokens);
 
+		$tokens = self::splitAtColons($tokens);
+
 		$tokens = self::joinSquareBrackets($tokens);
+
+		$tokens = self::wrapBoldCommand($tokens);
 
 		$tokens = self::wrapTokens($tokens);
 
+		return $tokens;
+	}
+
+	public static function wrapBoldCommand($tokens) {
+		$wrap = false;
+		foreach ($tokens as $i => &$token) {
+			if (substr($token, 0, 8) === '\textbf{'
+					&& substr($token, count($token) - 2, 1) !== '}') {
+				$token = $token . '}';
+				$wrap = true;
+			}
+			else if ($wrap
+					&& substr($token, count($token) - 2, 1) === '}') {
+				$token = '\textbf{' . $token;
+				$wrap = false;
+			}
+			else if ($wrap
+					&& $token !== ' ') {
+				$token = '\textbf{' . $token . '}';
+			}
+		}
 		return $tokens;
 	}
 
