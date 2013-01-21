@@ -28,7 +28,7 @@ class Table {
 		$lastRows = substr($wikiaSyntaxToParse, strrpos($wikiaSyntaxToParse, '|-') + 2);
 		$lastRows = preg_split('/!/', substr($lastRows, strpos($lastRows, '!') + 1));
 
-		$latexSyntax = '\newline \begin{tabular}{';
+		$latexSyntax = '\begin{tabular}{';
 
 		$columns = array();
 		for ($i = 0; $i < count($lastRows); $i++) {

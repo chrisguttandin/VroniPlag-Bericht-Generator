@@ -36,8 +36,7 @@ function korrStringWiki($s, $doTrim=true)
 			'&',
 			'#',
 			'%',
-			'
-',
+			'\n',
 			'_',
 			'^',
 			'´',
@@ -60,7 +59,8 @@ function korrStringWiki($s, $doTrim=true)
 			'\&',
 			'\#',
 			'\%',
-			' ', // double whitespaces are ignored by LaTeX
+			'\newline
+', // double whitespaces are ignored by LaTeX
 			'\_',
 			'\^',
 			'\'',
@@ -95,8 +95,8 @@ function korrString($s, $doTrim=true)
 		if (preg_match('/(\\\begin{figure}\[.*?\](\s\\\begin{minipage}{.*?}\s\\\includegraphics\[.*?\]{.*?}\s\\\caption{.*?}\s\\\end{minipage})+\s\\\end{figure})/s', $part, $match)) {
 			$result .= $match[1];
 		} else {
-			foreach (preg_split('/(\\\newline\s\\\begin{tabular}{[lr|]*}.*?\\\end{tabular})/s', $part, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as $part) {
-				if (preg_match('/(\\\newline\s\\\begin{tabular}{[lr|]*})(.*?)\\\end{tabular}/s', $part, $match)) {
+			foreach (preg_split('/(\\\begin{tabular}{[lr|]*}.*?\\\end{tabular})/s', $part, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as $part) {
+				if (preg_match('/(\\\begin{tabular}{[lr|]*})(.*?)\\\end{tabular}/s', $part, $match)) {
 
 					$rows = preg_split('/\\\[^a-z]/', $match[2]);
 
@@ -114,7 +114,7 @@ function korrString($s, $doTrim=true)
 						$rows[$i] = "\n" . '\hline' . "\n" . implode('&', $columns);
 					}
 					
-					$result .= '\newline' . $match[1] . implode('\\\\', $rows) . "\n" . '\hline' . "\n" . '\end{tabular}';
+					$result .= $match[1] . implode('\\\\', $rows) . "\n" . '\hline' . "\n" . '\end{tabular}';
 				} else {
 					foreach (preg_split('/(<math>.*?<\/math>)/s', $part, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as $part) {
 						if (preg_match('/<math>(.*?)<\/math>/s', $part, $match)) {
