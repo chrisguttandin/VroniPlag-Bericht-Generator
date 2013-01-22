@@ -59,8 +59,7 @@ function korrStringWiki($s, $doTrim=true)
 			'\&',
 			'\#',
 			'\%',
-			'\newline
-', // double whitespaces are ignored by LaTeX
+			' \newline ', // double whitespaces are ignored by LaTeX
 			'\_',
 			'\^',
 			'\'',
@@ -70,7 +69,7 @@ function korrStringWiki($s, $doTrim=true)
 			'\textrightarrow{}',
 			'o',
 			'--',
-			'-',
+			'', //'-',
 			'\$',
 			'$[$',
 			'$]$',
@@ -201,6 +200,16 @@ function korrStringWithLinks($s, $doTrim=true, $stuffIntoFootnotes=false, $enabl
 	return $result;
 }
 
+function korrWikiFontStylesWithoutLineBreaks($s)
+{
+	$s = preg_replace('/\'\'\'(.*?)\'\'\'/s', '\textbf{$1}', $s);
+	$s = preg_replace('/\'\'(.*?)\'\'/s', '\textsl{$1}', $s);
+	$s = preg_replace(';<u>(.*?)</u>;s', '\underline{$1}', $s);
+	$s = preg_replace(';<i>(.*?)</i>;s', '\textsl{$1}', $s);
+	$s = preg_replace(';<b>(.*?)</b>;s', '\textbf{$1}', $s);
+	return $s;
+}
+
 // konvertiert Wiki-Formatierung ('''...''', ''...'', <u>...</u>, <i>...</i>, <b>...</b>) nach LaTeX
 function korrWikiFontStyles($s)
 {
@@ -209,7 +218,7 @@ function korrWikiFontStyles($s)
 	$s = preg_replace(';<u>(.*?)</u>;s', '\underline{$1}', $s);
 	$s = preg_replace(';<i>(.*?)</i>;s', '\textsl{$1}', $s);
 	$s = preg_replace(';<b>(.*?)</b>;s', '\textbf{$1}', $s);
-	$s = preg_replace('/\n/', '\newline', $s);
+	$s = preg_replace('/\n/', ' \newline ', $s);
 	return $s;
 }
 

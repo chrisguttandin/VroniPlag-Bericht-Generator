@@ -102,7 +102,7 @@ $content = preg_replace('/===\s*([^=]+?)\s*===/s', '\subsection{$1}', $content);
 
 $content = preg_replace('/==\s*([^=]+?)\s*==/s', '\section{$1}', $content);
 
-$content = korrWikiFontStyles($content);
+$content = korrWikiFontStylesWithoutLineBreaks($content);
 
 $arr = explode("\n", $content);
 $arr[] = ''; // for ensuring itemize/enumerate are closed properly

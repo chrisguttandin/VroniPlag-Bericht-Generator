@@ -75,7 +75,7 @@ class Tokenizer {
 
 	private static function splitAtWhitespaces($text) {
 		// remove duplicate whitespace
-		$tokens = preg_split('/\s/', $text, -1, PREG_SPLIT_NO_EMPTY);
+		$tokens = preg_split('/\s/', $text);
 
 		// add double whitespace
 		$text = implode('  ', $tokens);
@@ -116,20 +116,22 @@ class Tokenizer {
 
 	public static function wrapBoldCommand($tokens) {
 		$wrap = false;
-		foreach ($tokens as $i => &$token) {
+		foreach ($tokens as $i => $token) {
 			if (substr($token, 0, 8) === '\textbf{'
 					&& substr($token, count($token) - 2, 1) !== '}') {
-				$token = $token . '}';
+				$tokens[$i] = $token . '}';
 				$wrap = true;
 			}
 			else if ($wrap
-					&& substr($token, count($token) - 2, 1) === '}') {
-				$token = '\textbf{' . $token;
+					&& substr($token, count($token) - 2, 1) === '}'
+					&& substr($token, count($token) - 3, 2) !== '{}') {
+				$tokens[$i] = '\textbf{' . $token;
 				$wrap = false;
 			}
 			else if ($wrap
-					&& $token !== ' ') {
-				$token = '\textbf{' . $token . '}';
+					&& $token !== ' '
+					&& preg_match('/^\\[a-zA-Z]$/', $token)) {
+				$tokens[$i] = '\textbf{' . $token . '}';
 			}
 		}
 		return $tokens;
