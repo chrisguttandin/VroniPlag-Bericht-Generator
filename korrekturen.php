@@ -143,7 +143,7 @@ function korrString($s, $doTrim=true)
 }
 
 // wie korrString, aber externe Links in Anmerkung mit @url umfassen
-function korrStringWithLinks($s, $doTrim=true, $stuffIntoFootnotes=false, $enableRef = false)
+function korrStringWithLinks($s, $doTrim=true, $stuffIntoFootnotes=false, $enableRef = false, &$footnotes = array())
 {
 	$result = '';
 	$prots = 'http|https|ftp';
@@ -167,6 +167,7 @@ function korrStringWithLinks($s, $doTrim=true, $stuffIntoFootnotes=false, $enabl
 			} else {
 				if($stuffIntoFootnotes) {
 					$result .= korrString($match[2]).'\footnote{\url{http://de.vroniplag.wikia.com/wiki/'.urlToTex($match[1]).'}}';
+					$footnotes[] = 'http://de.vroniplag.wikia.com/wiki/'.urlToTex($match[1]);
 				} else {
 					$result .= '\href{http://de.vroniplag.wikia.com/wiki/'.urlToTex($match[1]).'}{'.korrString($match[2]).'}';
 				}
@@ -179,6 +180,7 @@ function korrStringWithLinks($s, $doTrim=true, $stuffIntoFootnotes=false, $enabl
 				// externe Links mit Linktext
 				if($stuffIntoFootnotes) {
 					$result .= korrString($match[2]).'\footnote{\url{'.urlToTex($match[1]).'}}';
+					$footnotes[] = urlToTex($match[1]);
 				} else {
 					$result .= '\href{'.urlToTex($match[1]).'}{'.korrString($match[2]).'}';
 				}

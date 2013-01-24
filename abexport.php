@@ -133,10 +133,11 @@ if($abLinks === 'color+underline') {
 	print "\t".'pdfborder=0 0 1,%'."\n";
 	print "}\n";
 }
+
+require_once('korrekturen.php');
+$footnotes = array();
+
 ?>
-
-<?php require_once('korrekturen.php'); ?>
-
 
 \author{} 
 \date{}
@@ -146,7 +147,7 @@ if($abLinks === 'color+underline') {
 \vspace*{-2cm}
 \vbox{\huge \noindent <?php print korrString($titelaufnahme_title); ?>}
 \vspace*{5mm}
-\vbox{\noindent <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false); ?>}
+\vbox{\noindent <?php print korrStringWithLinks($titelaufnahme_subtitle, true, STUFFINTOFOOTNOTES, false, $footnotes); ?>}
 \vspace*{5mm}
 <?php
 
@@ -157,7 +158,7 @@ if($abLinks === 'color+underline') {
 	$parameters = json_decode($parameters, true);
 	$parameters = $parameters['AutoBarcodeParameter'];
 
-	$height = 300;
+	$height = 200;
 	$width = ($parameters['to'] - $parameters['from']) * 10;
 
 	$barcode = imagecreate($width, $height + 40);
@@ -263,6 +264,15 @@ Plagiatsfunde nach Seiten. Anzahl Seiten mit Plagiaten in <?php echo $parameters
 \begin{center}
 \url{<?php print 'http://de.vroniplag.wikia.com/wiki/'.BERICHT_SEITE;?>}
 \end{center}
+<?php
+
+	require_once('Logger.php');
+	Logger::dump($footnotes);
+	foreach ($footnotes as $index => $footnote) {
+		print '\footnotetext[' . ($index + 1) . ']{\url{' . $footnote . '}}' . "\n";
+	}
+
+?>
 \newpage
 
 %\AddToShipoutPicture*{\BackgroundPic}
