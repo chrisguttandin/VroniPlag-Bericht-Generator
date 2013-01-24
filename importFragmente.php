@@ -104,7 +104,7 @@ foreach($cache['fragments'] as $f) {
 	$i++;
 }
 
-array_multisort($sort, $list);
+//array_multisort($sort, $list);
 
 if(SORT_BY_CATEGORY) {
 	foreach($categoryWhitelist as $fragtypeTitle => $fragtype) {
