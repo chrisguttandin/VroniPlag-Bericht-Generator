@@ -183,6 +183,7 @@ function print_fragments($list, $fragtypeTitle)
 
 		//print '\newpage' . "\n";
 		//print 'Seite ' . $l['seite'] . ' Zeilen ' . $l['zeilen'] . ': ' . $l['wikiTitle'] . "\n";
+		print '\small ' . "\n";
 		print '\ '. "\n";
 		print '\newline' . "\n";
 		print '\newline' . "\n";
@@ -218,6 +219,7 @@ function print_fragments($list, $fragtypeTitle)
 			print '\newline' . "\n";
 			print '\newline' . "\n";
 		}
+		print '\normalsize ' . "\n";
 	}
 }
 
