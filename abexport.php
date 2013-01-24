@@ -160,7 +160,7 @@ if($abLinks === 'color+underline') {
 	$height = 300;
 	$width = ($parameters['to'] - $parameters['from']) * 10;
 
-	$barcode = imagecreate($width, $height);
+	$barcode = imagecreate($width, $height + 40);
 
 	$white = imagecolorallocate($barcode, 255, 255, 255);
 	$blue = imagecolorallocate($barcode, 0, 0, 255);
@@ -216,6 +216,18 @@ if($abLinks === 'color+underline') {
 	// Balken oben und unten
 	imagefilledrectangle($barcode, 0, 0, $width, 10, $black);
 	imagefilledrectangle($barcode, 0, $height - 10, $width, $height, $black);
+
+	$opensans = dirname(__FILE__) . "/ttf/OpenSans-Regular.ttf";
+
+	// Skala
+	$x = 100;
+	while ($x < $width) {
+		imagefilledrectangle($barcode, $x, $height, $x + 10, $height + 10, $black);
+		$size = imagettfbbox(20, 0, $opensans, $x / 10);
+		imagettftext($barcode, 20, 0, $x + 5 - ($size[4] - $size[0]) / 2, $height + 35, $black, $opensans, $x / 10);
+		$x += 100;
+	}
+	
 
 	imagepng($barcode, 'img/barcode.png');
 
