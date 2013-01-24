@@ -266,8 +266,6 @@ Plagiatsfunde nach Seiten. Anzahl Seiten mit Plagiaten in <?php echo $parameters
 \end{center}
 <?php
 
-	require_once('Logger.php');
-	Logger::dump($footnotes);
 	foreach ($footnotes as $index => $footnote) {
 		print '\footnotetext[' . ($index + 1) . ']{\url{' . $footnote . '}}' . "\n";
 	}
